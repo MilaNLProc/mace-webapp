@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+importFrom(dplyr, mutate)
+importFrom(dplyr, coalesce)
+importFrom(dplyr, pull)
+importFrom(dplyr, "%>%")
