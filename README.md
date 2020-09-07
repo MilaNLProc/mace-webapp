@@ -34,6 +34,13 @@ Typically packages are installed in R using the install.packages() function. Pac
 This example project manages R dependencies through the package structure. Dependencies are listed under the `Imports:` header of the DESCRIPTION file. Dependencies can be added to this section in order to 
 include them in the package. 
 
+## Run app
+To run the app
+```
+make shiny
+```
+and it will be served at localhost:8787.
+
 ## Coding
 When you update configuration you must rerun the `make build` command but when you update code it will be immediate because the docker mounts the folder so all code is shared in realtime.
 To see code changes updated in realtime first run
