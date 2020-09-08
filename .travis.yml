@@ -1,23 +1,19 @@
 language: generic
 sudo: required
-# cache:
-#     bundler: true
-#     directories:
-#       - $HOME/docker
 
 services:
     - docker
 
-cache:
-    directories:
-    - docker_images
+# cache:
+#     directories:
+#     - docker_images
     
 before_install:
-    - docker load -i docker_images/images.tar || true
+    # - docker load -i docker_images/images.tar || true
     - docker build -t rstats-data-mvp:latest .
 
-before_cache:
-    - docker save -o docker_images/images.tar $(docker images -a -q)
+# before_cache:
+#     - docker save -o docker_images/images.tar $(docker images -a -q)
 
 # before_cache:
 #     # Save tagged docker images

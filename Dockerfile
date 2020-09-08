@@ -9,7 +9,7 @@ RUN apt-get update -y && \
     apt-get install -y openjdk-8-jdk
 
 # install R devtools
-# RUN Rscript -e "install.packages('devtools', repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "install.packages('devtools', repos = 'https://cloud.r-project.org')"
 
 # clean local repository
 RUN apt-get clean
@@ -24,21 +24,21 @@ COPY . .
 
 # NOTE: This step takes ~ 10 mins but it only re-runs when the
 # contents of the "DESCRIPTION" file changes.
-# RUN Rscript -e "devtools::install_deps('/opt/app')" && \
-#     Rscript -e "devtools::check('/opt/app', error_on = 'error')"
+RUN Rscript -e "devtools::install_deps('/opt/app')" && \
+    Rscript -e "devtools::check('/opt/app', error_on = 'error')"
 
 COPY . .
 
-# RUN Rscript -e "devtools::install('/opt/app')"
+RUN Rscript -e "devtools::install('/opt/app')"
 
 EXPOSE 8787
 
-# CMD Rscript -e "testpackage::runExample()"
+CMD Rscript -e "testpackage::runExample()"
 
 ###############################################################################
 # test
 ###############################################################################
 
-# FROM main as test
+FROM main as test
 
-# RUN Rscript -e "devtools::test()"
+RUN Rscript -e "devtools::test()"
