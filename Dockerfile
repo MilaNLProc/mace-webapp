@@ -2,7 +2,7 @@
 # main
 ###############################################################################
 
-FROM rocker/shiny:4.0.2 as main
+FROM rocker/shiny-verse:4.0.2 as main
 
 RUN apt-get update -y && \
     apt-get install -y libssl-dev libxml2-dev libgit2-dev && \

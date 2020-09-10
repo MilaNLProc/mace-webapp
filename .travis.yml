@@ -10,7 +10,7 @@ services:
     
 before_install:
     # - docker load -i docker_images/images.tar || true
-    - docker build -t rstats-data-mvp:latest .
+    - docker build -t maceapp:latest .
 
 # before_cache:
 #     - docker save -o docker_images/images.tar $(docker images -a -q)
