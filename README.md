@@ -67,10 +67,12 @@ Install the selected Docker version with the command:
 
 ### Remove docker
 To remove docker run
+
 	sudo yum remove docker docker-common docker-selinux docker-engine 
 
 ### Fix: Docker got permission denied issue
 Run the code below to fix the permission to access docker.socker issue
+
 	sudo chmod 666 /var/run/docker.sock
 
 ### Run Docker container in the background
