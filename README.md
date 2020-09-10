@@ -4,6 +4,90 @@ This repository is a skeleton project for R MVP development.
 
 The included example-project shows how to build a basic Shiny app within an R package, as well as generating documentation and managing external dependencies.
 
+## Installing Docker on CentOS 7 With Yum
+Installing from Docker repositories using the yum command is the easiest and most popular method. For more info, follow [this](https://phoenixnap.com/kb/how-to-install-docker-centos-7) guide (basically, copy-pasted from there).
+
+### Step 1: Update Docker Package Database
+In a terminal window, type:
+
+	sudo yum check-update
+
+Allow the operation to complete.
+
+### Step 2: Install the Dependencies
+The next step is to download the dependencies required for installing Docker.
+
+Type in the following command:
+
+	sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+The –y switch indicates to the yum installer to answer “yes” to any prompts that may come up. The yum-utils switch adds the yum-config-manager. Docker uses a device mapper storage driver, and the device-mapper-persistent-data and lvm2 packages are required for it to run correctly.
+
+### Step 3: Add the Docker Repository to CentOS
+To install the edge or test versions of Docker, you need to add the Docker CE stable repository to your system. To do so, run the command:
+
+	sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+### Step 4: Install Docker On CentOS Using Yum
+With everything set, you can finally move on to installing Docker on CentOS 7 by running:
+
+	sudo yum install docker
+
+The system should begin the installation. Once it finishes, it will notify you the installation is complete and which version of Docker is now running on your system.
+
+### Step: 5 Manage Docker Service
+Although you have installed Docker on CentOS, the service is still not running.
+
+To start the service, enable it to run at startup. Run the following commands in the order listed below.
+
+Start Docker:
+
+	sudo systemctl start docker
+
+Enable Docker:
+
+	sudo systemctl enable docker
+
+Check the status of the service with:
+
+	sudo systemctl status docker
+
+### Bonus. Install a Specific Version of Docker on CentOS
+To install a specific version of Docker, start by listing the available releases.
+
+Type the following in your terminal window:
+
+	yum list docker-ce --showduplicates | sort –r
+
+The system should give you a list of different versions from the repositories you have enabled above.
+
+Install the selected Docker version with the command:
+
+	sudo yum install docker-ce-<VERSION STRING>
+
+### Remove docker
+To remove docker run
+	sudo yum remove docker docker-common docker-selinux docker-engine 
+
+### Fix: Docker got permission denied issue
+Run the code below to fix the permission to access docker.socker issue
+	sudo chmod 666 /var/run/docker.sock
+
+### Run Docker container in the background
+To run a Docker container in the background, use the use `-d=true` or just `-d` option.
+
+To list all containers, run the following command (default shows just running).
+
+	docker ps -a
+
+In addition, to reattach to a detached container, use docker attach command.
+
+	docker attach --name mycontainer
+
+or 
+
+	docker attach container_id
+
 ## Getting Started
 
 First, you need to have the command 'make' and  Docker setup on your machine. 

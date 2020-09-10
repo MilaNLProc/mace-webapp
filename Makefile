@@ -31,4 +31,4 @@ exec: ## Exec into the container
 
 shiny: DARGS?=-v $(PWD):/opt/app -p 8787:8787
 shiny: ## Run shiny
-	docker run --name maceapp_container -it --rm $(DARGS) $(PROJECT):${BUILD_TAG}
+	docker run -d --name maceapp_container -it --rm $(DARGS) $(PROJECT):${BUILD_TAG}
