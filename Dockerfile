@@ -2,16 +2,25 @@
 # main
 ###############################################################################
 
-FROM rocker/shiny:4.0.2 as main
+FROM rocker/shiny-verse:4.0.2 as main
 
 RUN apt-get update -y && \
-    apt-get install -y libssl-dev libxml2-dev libgit2-dev
+    apt-get install -y libssl-dev libxml2-dev libgit2-dev && \
+    apt-get install -y openjdk-8-jdk
 
+# install R devtools
 RUN Rscript -e "install.packages('devtools', repos = 'https://cloud.r-project.org')"
+
+# clean local repository
+RUN apt-get clean
+
+# set up JAVA_HOME
+ENV JAVA_HOME=/usr/lib/jvm/openjdk-8-jdk
 
 WORKDIR /opt/app
 
-COPY DESCRIPTION .
+# copy local folder in container
+COPY . .
 
 # NOTE: This step takes ~ 10 mins but it only re-runs when the
 # contents of the "DESCRIPTION" file changes.

@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 
 # Docker image build info
-PROJECT:=rstats-data-mvp
+PROJECT:=maceapp
 BUILD_TAG?=latest
 
 ALL_IMAGES:=src
@@ -31,4 +31,4 @@ exec: ## Exec into the container
 
 shiny: DARGS?=-v $(PWD):/opt/app -p 8787:8787
 shiny: ## Run shiny
-	docker run -it --rm $(DARGS) $(PROJECT):${BUILD_TAG}
+	docker run --name maceapp_container -it --rm $(DARGS) $(PROJECT):${BUILD_TAG}
