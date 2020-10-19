@@ -30,6 +30,11 @@ RUN Rscript -e "devtools::install_deps('/opt/app')" && \
 COPY . .
 
 RUN Rscript -e "devtools::install('/opt/app')"
+RUN Rscript -e "install.packages('writexl', repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "install.packages('stringr', repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "install.packages('shinyalert', repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "install.packages('data.table', repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "install.packages('shinyWidgets', repos = 'https://cloud.r-project.org')"
 
 EXPOSE 8787
 
