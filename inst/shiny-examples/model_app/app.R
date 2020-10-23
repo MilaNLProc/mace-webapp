@@ -7,7 +7,7 @@ library(shinyalert)
 require(data.table)
 library(shinyWidgets)
 
-path_mace = "../../../java/mace.jar"
+path_mace = "~/../opt/app/java/MACE.jar"
 
 mace_done = FALSE
 
@@ -263,7 +263,7 @@ ui <- shinyUI(fluidPage(
 
         ),
 
-        #downloadButton("download", "Download"),
+        # downloadButton("download", "Download"),
         downloadButton("download", "Run Mace", width = '100%',class = "btn-primary"),
   ),
     ),

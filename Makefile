@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 
 # Docker image build info
-PROJECT:=maceapp
+PROJECT:=mace-webapp
 BUILD_TAG?=latest
 
 ALL_IMAGES:=src
