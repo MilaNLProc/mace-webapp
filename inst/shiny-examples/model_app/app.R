@@ -8,6 +8,7 @@ require(data.table)
 library(shinyWidgets)
 
 path_mace = "../../../java/mace.jar"
+
 mace_done = FALSE
 
 server <- shinyServer(function(input, output, session) {
@@ -30,7 +31,7 @@ server <- shinyServer(function(input, output, session) {
   })
 
   output$table <- renderDT(
-    data()
+    data(), options = list(pageLength = 30, info = TRUE)
   )
 
 
@@ -41,6 +42,14 @@ server <- shinyServer(function(input, output, session) {
   })
   outputOptions(output, 'fileUploaded', suspendWhenHidden=FALSE)
 
+  ## Check if file is uploaded AND Long mode is selected to show the specific Long panel
+  output$fileUploadedAndLong <- reactive({
+    uploaded = !is.null(data())
+    is_long = input$view == "Long"
+    return(uploaded & is_long)
+  })
+  outputOptions(output, 'fileUploadedAndLong', suspendWhenHidden=FALSE)
+
   ## Check if file is uploaded AND Wide mode is selected to show the specific Wide panel
   output$fileUploadedAndWide <- reactive({
     uploaded = !is.null(data())
@@ -49,20 +58,12 @@ server <- shinyServer(function(input, output, session) {
   })
   outputOptions(output, 'fileUploadedAndWide', suspendWhenHidden=FALSE)
 
-  ## Check if file is uploaded AND Compact mode is selected to show the specific Compact panel
-  output$fileUploadedAndCompact <- reactive({
-    uploaded = !is.null(data())
-    is_compact = input$view == "Compact"
-    return(uploaded & is_compact)
-  })
-  outputOptions(output, 'fileUploadedAndCompact', suspendWhenHidden=FALSE)
+  output$annotators <- renderUI(selectInput('annLong', 'Select Annotators column', names(data()), selected = names(data())[2]))
+  output$items <- renderUI(selectInput('itLong', 'Select Items column', names(data())))
+  output$annotations <- renderUI(selectInput('annsLong', 'Select Annotations column', names(data()), selected = names(data())[4]))
 
-  output$annotators <- renderUI(selectInput('annWide', 'Select Annotators column', names(data()), selected = names(data())[2]))
-  output$items <- renderUI(selectInput('itWide', 'Select Items column', names(data())))
-  output$annotations <- renderUI(selectInput('annsWide', 'Select Annotations column', names(data()), selected = names(data())[4]))
-
-  output$annotatorsCompact <- renderUI(pickerInput('annCompact', 'Select Annotators columns', names(data()),options = list(`actions-box` = TRUE), selected = names(data())[3], multiple = TRUE))
-  output$itemsCompact <- renderUI(selectInput('itCompact', 'Select Items column', c('N/A',names(data()))))
+  output$annotatorsWide <- renderUI(pickerInput('annWide', 'Select Annotators columns', names(data()),options = list(`actions-box` = TRUE), selected = names(data())[3], multiple = TRUE))
+  output$itemsWide <- renderUI(selectInput('itWide', 'Select Items column', c('N/A',names(data()))))
 
 
   output$downloadData <- downloadHandler(
@@ -74,26 +75,26 @@ server <- shinyServer(function(input, output, session) {
     }
   )
 
-  process_input_wide <- function(df){
-    print("Wide Table preprocessing")
+  process_input_long <- function(df){
+    print("Long Table preprocessing")
     setDT(df)
-    #f = as.formula(sprintf('%s ~ %s', input$itWide, input$annWide))
-    pivot_table = data.table::dcast(df, paste(input$itWide,'~', input$annWide),
-                                    value.var = (input$annsWide))
+    #f = as.formula(sprintf('%s ~ %s', input$itLong, input$annLong))
+    pivot_table = data.table::dcast(df, paste(input$itLong,'~', input$annLong),
+                                    value.var = (input$annsLong))
 
-    if (input$itWide != "N/A"){
-      pivot_table[,input$itWide] <- NULL # Remove ID column
+    if (input$itLong != "N/A"){
+      pivot_table[,input$itLong] <- NULL # Remove ID column
     }
-    #df <- df[input$annCompact]
+    #df <- df[input$annWide]
     #df[is.na(df)] <- NULL
     write.table(df,"temp.csv",sep=",", row.names = FALSE, col.names=FALSE, na = "")
   }
 
-  process_input_compact <- function(df){
-    if (input$itCompact != "N/A"){
-      df[input$itCompact] <- NULL # Remove ID column
+  process_input_wide <- function(df){
+    if (input$itWide != "N/A"){
+      df[input$itWide] <- NULL # Remove ID column
     }
-    df <- df[input$annCompact]
+    df <- df[input$annWide]
     #df[is.na(df)] <- NULL
     write.table(df,"temp.csv",sep=",", row.names = FALSE, col.names=FALSE, na = "")
   }
@@ -161,10 +162,10 @@ server <- shinyServer(function(input, output, session) {
         df = data()
         shiny::incProgress(1/10)
         # convert input in desired format
-        if (input$view == "Compact"){
-          process_input_compact(df)
-        } else {
+        if (input$view == "Wide"){
           process_input_wide(df)
+        } else {
+          process_input_long(df)
         }
 
         shiny::incProgress(3/10)
@@ -216,17 +217,17 @@ ui <- shinyUI(fluidPage(
                      inline=TRUE),
 
         radioButtons("view", "View mode",
-                     choices = c(Wide='Wide',Compact='Compact'),
-                     selected = "Wide",
+                     choices = c(Long='Long',Wide='Wide'),
+                     selected = "Long",
                      inline=TRUE),
         conditionalPanel(
-            'output.fileUploadedAndCompact',
+            'output.fileUploadedAndWide',
             #h4("Select Annotation column"),
-            uiOutput("annotatorsCompact"),
-            uiOutput("itemsCompact")
+            uiOutput("annotatorsWide"),
+            uiOutput("itemsWide")
           ),
         conditionalPanel(
-          'output.fileUploadedAndWide',
+          'output.fileUploadedAndLong',
           #h4("Select Annotation column"),
           uiOutput("annotators"),
           uiOutput("items"),
