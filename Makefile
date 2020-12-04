@@ -3,7 +3,7 @@
 
 # Docker image build info
 PROJECT:=mace-webapp
-BUILD_TAG?=latest
+BUILD_TAG?=first
 
 ALL_IMAGES:=src
 
@@ -27,7 +27,7 @@ test: ## Run tests
 
 exec: DARGS?=-v $(PWD):/opt/app
 exec: ## Exec into the container
-	docker run -it --rm $(DARGS) $(PROJECT) bash
+	docker run -it --rm $(DARGS) $(PROJECT):${BUILD_TAG} bash
 
 shiny: DARGS?=-v $(PWD):/opt/app -p 8787:8787
 shiny: ## Run shiny

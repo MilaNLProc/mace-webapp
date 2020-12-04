@@ -35,6 +35,9 @@ RUN Rscript -e "install.packages('stringr', repos = 'https://cloud.r-project.org
 RUN Rscript -e "install.packages('shinyalert', repos = 'https://cloud.r-project.org')"
 RUN Rscript -e "install.packages('data.table', repos = 'https://cloud.r-project.org')"
 RUN Rscript -e "install.packages('shinyWidgets', repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "install.packages('shinyBS', repos = 'https://cloud.r-project.org')"
+RUN Rscript -e "install.packages('shinydashboard', repos = 'https://cloud.r-project.org')"
+
 
 EXPOSE 8787
 
